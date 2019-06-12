@@ -1,8 +1,9 @@
-var app = (function(){
-    let init=function(){
+// use
+var app = (()=>{
+    let init=()=> {
         login_form();
     }
-    let login_form = function(){
+    let login_form = ()=>{
         let wrapper = document.querySelector('#wrapper');
         wrapper.innerHTML = '<form action="/action_page.php">'
         +'  First name:<br>'
@@ -15,16 +16,13 @@ var app = (function(){
         +'  <input id="join-btn" type="button" value="JOIN">'
         +'</form> ';
         let join_btn = document.querySelector('#join-btn');
-        join_btn.addEventListener('click',function(){
+        join_btn.addEventListener('click',()=>{
             join_form();
         });
         
     }
-    let join_form = function(){
-        let wrapper = document.querySelector('#wrapper');
-        wrapper.innerHTML = '<form>'
-        +'	ID<br>'
-        +'	<input type="text" name="id"><br>'
+    let join_form =()=>{
+        
         +'	PW<br>'
         +'	<input type="password" name="pw"><br>'
         +'	이름<br>'
