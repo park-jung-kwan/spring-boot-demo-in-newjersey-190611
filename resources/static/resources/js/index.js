@@ -1,12 +1,18 @@
 var app = (function(){
     let init=function(){
-        alert('IIFE 성공 !!');
-
+        login_form();
+    }
+    let login_form = function(){
         var wrapper = document.querySelector('#wrapper');
-        wrapper.innerHTML = '<h1>SPA 시작</h1>'
-        +'<div id="target">삭제할 내용</div>'
-        +'<button id="btn">지워버리자</button>'
-        +'<button id="btn2">추가하자</button>';
+        wrapper.innerHTML = '<form action="/action_page.php">'
+        +'  First name:<br>'
+        +'  <input type="text" name="firstname" value="Mickey">'
+        +'  <br>'
+        +'  Last name:<br>'
+        +'  <input type="text" name="lastname" value="Mouse">'
+        +'  <br><br>'
+        +'  <input type="submit" value="Submit">'
+        +'</form> ';
         
         var btn = document.querySelector('#btn');
         var target = document.getElementById('target');
