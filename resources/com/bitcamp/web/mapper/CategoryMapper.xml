@@ -15,9 +15,9 @@
                                             parameterType="com.bitcamp.web.domain.CategoryDTO">
         select * from CATEGORIES where CATEGORY_NAME = #{categoryName}
     </select>
-   <select id="selectCategoryBycategoryId" resultType="com.bitcamp.web.domain.CategoryDTO"
+   <select id="selectCategoryByCategoryId" resultType="com.bitcamp.web.domain.CategoryDTO"
                                             parameterType="string">
-        select * from CATEGORIES where CATEGORY_ID = #{categoryId}
+        select * from CATEGORIES where CATEGORY_ID = #{value}
     </select>
     <update id="updateCategory" parameterType="com.bitcamp.web.domain.CategoryDTO">
         update CATEGORIES set
