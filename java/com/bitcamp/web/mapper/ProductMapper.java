@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
  * ProductMapper
  */
 @Repository
-public class ProductMapper {
+public interface ProductMapper {
 
     
 }
