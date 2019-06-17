@@ -18,4 +18,6 @@ public class SupplierDTO {
                     postalCode,
                     country,
                     phone;
+
+           
 }

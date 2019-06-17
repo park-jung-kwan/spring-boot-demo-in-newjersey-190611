@@ -7,10 +7,10 @@ var app = (()=>{
         let wrapper = document.querySelector('#wrapper');
         wrapper.innerHTML = '<form action="/action_page.php">'
         +'  First name:<br>'
-        +'  <input type="text" name="firstname" value="Mickey">'
+        +'  <input type="text" id="customerId" name="customerId">'
         +'  <br>'
         +'  Last name:<br>'
-        +'  <input type="text" name="lastname" value="Mouse">'
+        +'  <input type="text" id="password" name="password">'
         +'  <br><br>'
         +'  <input id="login-btn" type="button" value="LOGIN">'
         +'  <input id="join-btn" type="button" value="JOIN">'
@@ -20,9 +20,39 @@ var app = (()=>{
             join_form();
         });
         let login_btn = document.querySelector('#login-btn');
-        login_btn.addEventListener('click',()=>{
+        login_btn.addEventListener('click',(e)=>{
+            e.preventDefault();
             alert('로그인 버튼 클릭');
-            count();
+            id = document.getElementById('customerId').value;
+            pass = document.getElementById('password').value;
+            let xhr = new XMLHttpRequest(),
+                method = 'GET',
+                url = 'login/'+id+'/'+pass;
+            xhr.open(method, url, true);
+            xhr.onreadystatechange=()=>{
+                if(xhr.readyState=== 4 && xhr.status === 200){
+                    let d = xhr.responseText;
+                    if(d==='SUCCESS'){
+                        let wrapper = document.querySelector('#wrapper');
+                        wrapper.innerHTML = '<h1>마이페이지</h1> ';
+                    }else{
+                        let wrapper = document.querySelector('#wrapper');
+                        wrapper.innerHTML = '<form action="/action_page.php">'
+                        +'  First name:<br>'
+                        +'  <input type="text" id="customerId" name="customerId">'
+                        +'  <br>'
+                        +'  Last name:<br>'
+                        +'  <input type="text" id="password" name="password">'
+                        +'  <br><br>'
+                        +'  <input id="login-btn" type="button" value="LOGIN">'
+                        +'  <input id="join-btn" type="button" value="JOIN">'
+                        +'</form> ';
+                    }
+                    
+                }
+            };
+            xhr.send();
+            
         });
 
 
