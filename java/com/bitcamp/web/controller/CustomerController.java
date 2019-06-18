@@ -5,8 +5,12 @@ import com.bitcamp.web.service.CustomerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,17 +29,19 @@ public class CustomerController {
         return count+"";
     }
 
-    @RequestMapping("/login/{customerId}/{password}")
-    public String login(@PathVariable("customerId")String id,
+    @GetMapping("/customers/{customerId}/{password}")
+    public CustomerDTO login(@PathVariable("customerId")String id,
                         @PathVariable("password")String pass){
-        System.out.println("AJAX로 넘어온 ID :"+id);   
-        System.out.println("AJAX로 넘어온 PWD :"+pass);                  
         customer.setCustomerId(id);
         customer.setPassword(pass);
-        return (!customerService
-                    .login(customer)
-                    .getCustomerName()
-                    .equals(""))
-                        ?"SUCCESS":"FAIL"; 
+        return customerService.login(customer); 
+    }
+
+    @PostMapping("/customers")
+    public CustomerDTO join(@RequestBody CustomerDTO param){
+        System.out.println("=====post mapping======");
+        System.out.println(param.getCustomerId());
+        System.out.println(param.getPassword());
+        return customerService.login(customer); 
     }
 }
