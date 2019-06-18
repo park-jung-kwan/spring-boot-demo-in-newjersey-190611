@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * CustomerController
  */
 @RestController
+@RequestMapping("/customers")
 public class CustomerController {
     @Autowired CustomerService customerService;
     @Autowired CustomerDTO customer;
@@ -29,7 +30,7 @@ public class CustomerController {
         return count+"";
     }
 
-    @GetMapping("/customers/{customerId}/{password}")
+    @GetMapping("/{customerId}/{password}")
     public CustomerDTO login(@PathVariable("customerId")String id,
                         @PathVariable("password")String pass){
         customer.setCustomerId(id);
@@ -37,11 +38,12 @@ public class CustomerController {
         return customerService.login(customer); 
     }
 
-    @PostMapping("/customers")
+    @PostMapping("")
     public CustomerDTO join(@RequestBody CustomerDTO param){
         System.out.println("=====post mapping======");
         System.out.println(param.getCustomerId());
         System.out.println(param.getPassword());
+        System.out.println(param.getCustomerName());
         return customerService.login(customer); 
     }
 }

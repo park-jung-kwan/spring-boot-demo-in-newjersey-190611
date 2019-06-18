@@ -1,20 +1,20 @@
 // use
 var app =  {
-        $wrapper :  "",
+        $wrapper :  $wrapper = document.querySelector('#wrapper'),
         init : ()=>{
-            $wrapper = document.querySelector('#wrapper'),
             $wrapper.innerHTML = app.login_form();
             let join_btn = document.querySelector('#join-btn');
             join_btn.addEventListener('click',()=>{
                 $wrapper.innerHTML = app.join_form();
                 document.getElementById('confirm-btn')
-                .addEventListener('click', ()=>{
+                .addEventListener('click', e=>{
+                    e.preventDefault();
                     alert('조인버튼 클릭');
-                    join();
+                    app.join();
                 });
             });
             let login_btn = document.querySelector('#login-btn');
-            login_btn.addEventListener('click',(e)=>{
+            login_btn.addEventListener('click',e=>{
                 e.preventDefault();
                 alert('로그인 버튼 클릭');
                 id = document.getElementById('customerId').value;
@@ -39,13 +39,28 @@ var app =  {
             
         },
         join : ()=>{
-            let xhr = new XMLHttpRequest()
-            xhr.open('POST','customers');
-            xhr.setRequestHeader('Content-type','application/json;charset=UTF-8');
-            xhr.send(JSON.stringify({'customerId':'hong', 'password':'1'}));
+            let xhr = new XMLHttpRequest();
+            let data = {
+                customerId : document.getElementById('customerId').value, 
+                customerName : document.getElementById('customerName').value,
+                password : document.getElementById('password').value
+            };
+            xhr.open('POST','customers',true);
+            xhr.setRequestHeader('Content-type','application/json; charset=utf-8')
+            xhr.onload=()=>{
+                if(xhr.readyState==4 & xhr.status==200){
+                    let d = xhr.responseText;
+                    alert('회원가입 성공 :'+d.result);
+                }else{
+                    alert('회원가입 실패');
+                }
+            };
+            xhr.send(JSON.stringify(data));
         },
+     
+        
         count : ()=>{
-            var xhr = new XMLHttpRequest();
+            let xhr = new XMLHttpRequest();
             xhr.open('GET', 'count', true);
             xhr.onload=()=>{
                 if(xhr.readyState===4 && xhr.status === 200){
@@ -70,21 +85,20 @@ app.login_form=()=>{
     +'  <input type="text" id="customerId" name="customerId">'
     +'  <br>'
     +'  Last name:<br>'
-    +'  <input type="text" id="password" name="password">'
+    +'  <input type="text" id="customerName" name="customerName">'
     +'  <br><br>'
     +'  <input id="login-btn" type="button" value="LOGIN">'
     +'  <input id="join-btn" type="button" value="JOIN">'
     +'</form> ';
 };
 app.join_form=()=>{
-    return 'PW<br>'
-    +'	<input type="password" name="pw"><br>'
-    +'	이름<br>'
-    +'	<input type="text" name="name"><br>'
-    +'	주민번호<br>'
-    +'	<input type="password" name="ssn"><br>'
-    +'	전화번호<br>'
-    +'	<input type="text" name="phone"><br><br>'
+    return '<form>아이디<br>'
+    +'	<input type="text" id="customerId" name="customerId"><br>'
+    +'	비밀번호<br>'
+    +'	<input type="password" id="password" name="password"><br>'
+    +'	이 름<br>'
+    +'	<input type="text" id="customerName" name="customerName"><br>'
+    +'<br><br>'
     +'	<input id="confirm-btn" type="submit" value="확인">'
     +'	<input id="cancel-btn" type="reset" value="취소">'
     +'</form>';
