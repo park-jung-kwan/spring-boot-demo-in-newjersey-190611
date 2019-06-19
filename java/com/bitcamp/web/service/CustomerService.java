@@ -20,7 +20,7 @@ public interface CustomerService {
     public void deleteCustomer(CustomerDTO customer);
     public int countAll();
     public CustomerDTO login(CustomerDTO customer);
-
+    
 
     
 }
