@@ -33,17 +33,23 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO findCustomerByCustomerId(String customerId) {
-        return null;
+        return customerMapper.selectCustomerById(customerId);
     }
 
     @Override
-    public void updateCustomer(CustomerDTO customer) {
-
+    public int updateCustomer(CustomerDTO customer) {
+        int res = customerMapper.updateCustomer(customer);
+        if(res == 1){
+            System.out.println("서비스 수정성공");
+        }else{
+            System.out.println("서비스 수정실패");
+        }
+        return res;
     }
 
     @Override
     public void deleteCustomer(CustomerDTO customer) {
-        
+
     }
 
     @Override

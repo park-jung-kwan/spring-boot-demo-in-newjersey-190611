@@ -45,6 +45,7 @@ public class CustomerController {
     @GetMapping("/{customerId}/{password}")
     public CustomerDTO login(@PathVariable("customerId")String id,
                         @PathVariable("password")String pass){
+        
         customer.setCustomerId(id);
         customer.setPassword(pass);
         return customerService.login(customer);
@@ -52,16 +53,22 @@ public class CustomerController {
 
    
     @GetMapping("/{customerId}")
-    public CustomerDTO getCustomer() {
-
-        return customer;
+    public CustomerDTO getCustomer(@PathVariable String customerId) {
+        System.out.println("ID 검색 진입 : "+customerId);
+        return customerService.findCustomerByCustomerId(customerId);
     }
 
     @PutMapping("/{customerId}")
-    public HashMap<String,Object> updateCustomer() {
-        HashMap<String,Object> map = new HashMap<>();
-        
-        return map;
+    public CustomerDTO updateCustomer(@RequestBody CustomerDTO param) {
+        System.out.println("수정 할 객체: "+param.toString());
+        int res = customerService.updateCustomer(param);
+        System.out.println("====> "+res);
+        if(res == 1){
+            customer = customerService.findCustomerByCustomerId(param.getCustomerId());
+        }else{
+            System.out.println("컨트롤러 수정 실패");
+        }
+        return customer;
     }
 
     @DeleteMapping("/{customerId}")

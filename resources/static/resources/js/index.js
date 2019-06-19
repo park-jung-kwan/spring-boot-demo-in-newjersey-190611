@@ -8,13 +8,15 @@ var customer = {
     login_form : login_form,
     login : login,
     mypage : mypage,
+    mypage_form : mypage_form,
     count : count,
+    update_form : update_form,
     update : update,
     remove : remove
 };
 function init(){
     $wrapper.innerHTML = customer.login_form();
-    document.querySelector('#join-btn')
+    document.getElementById('join-btn')
         .addEventListener('click',()=>{
             $wrapper.innerHTML = customer.join_form();
             document.getElementById('confirm-btn')
@@ -23,9 +25,10 @@ function init(){
                 customer.join();
         });
     });
-    document.querySelector('#login-btn')
+    document.getElementById('login-btn')
         .addEventListener('click',e=>{
             e.preventDefault();
+            alert('로그인 버튼 클릭');
             customer.login();
     });
 }
@@ -90,6 +93,7 @@ function login_form(){
     +'</form> ';
 }
 function login(){
+    alert('로그인 함수에 들어옴');
     id = document.getElementById('customerId').value;
     pass = document.getElementById('password').value;
     let xhr = new XMLHttpRequest();
@@ -99,9 +103,10 @@ function login(){
             let d = JSON.parse(xhr.responseText);
             alert('로그인 성공 후 이름:'+d.customerName)
             if(d){
-                $wrapper.innerHTML = customer.mypage(d);
+                //$wrapper.innerHTML = customer.mypage(d);
+                customer.mypage(d);
             }else{
-                $wrapper.innerHTML = customer.login_form();
+                app.init();
             }
             
         }
@@ -110,9 +115,38 @@ function login(){
 }
 
 function mypage(x){
+    $wrapper.innerHTML = customer.mypage_form(x);
+
+    document.querySelector('#update-btn')
+        .addEventListener('click',e=>{
+            e.preventDefault();
+            alert('수정버튼 클릭');
+            customer.update(x);
+    });
+}
+
+function mypage_form(x){
     let customer = x;
-    alert('마이페이지로 넘어온 객체명 :'+customer.customerName)
-    return '<h1>마이페이지</h1> ';
+    return '<h1>'+customer.customerName+' 마이페이지</h1> <br>'
+    +'아이디<br>'
+    +'<span id="customerId">'+customer.customerId+'</span><br>'
+    +'비밀번호<br>'
+    +'	<span id="password">'+customer.password+'</span><br>'
+    +'이 름<br>'
+    +'<span id="customerName">'+customer.customerName+'</span>'
+    +'주민번호<br>'
+    +'<span id="ssn">'+customer.ssn+'</span>'
+    +'전화번호<br>'
+    +'	<span id="phone">'+customer.phone+'</span><br>'
+    +'도 시<br>'
+    +'	<span id="city">'+customer.city+'</span><br>'
+    +'주 소<br>'
+    +'	<span id="address">'+customer.address+'</span><br>'
+    +'우편번호<br>'
+    +'	<span id="postalcode">'+customer.postalcode+'</span><br>'
+    +'<br><br>'
+    +'	<input id="update-btn" type="button" value="수 정">'
+    +'	<input id="remove-btn" type="button" value="탈 퇴">';
 }
 function count(){
     let xhr = new XMLHttpRequest();
@@ -126,18 +160,58 @@ function count(){
     }
     xhr.send();
 }
-function update(){
-    let customerId = document.getElementById('customerId');
-    let xhr = new XMLHttpRequest();
-    xhr.open('update','customers/'+customerId,true);
-    xhr.onload=()=>{
-        if(xhr.readyState===4 && xhr.status === 200){
-            alert('성공');
-            let wrapper = document.querySelector('#wrapper');
-            wrapper.innerHTML = '총 고객수 : <h1>'+xhr.responseText+'</h1>'
-        }
-    };
-    xhr.send();
+function update_form(x){
+    return '<form>'
+    +'아이디<br>'
+    +'	<span id="customerId">'+x.customerId+'</span><br>'
+    +'비밀번호<br>'
+    +'	<input type="password" id="password" name="password" value="'+x.password+'"><br>'
+    +'이 름<br>'
+    +'	<span id="customerName">'+x.customerName+'</span><br>'
+    +'주민번호<br>'
+    +'	<span id="ssn">'+x.ssn+'</span><br>'
+    +'전화번호<br>'
+    +'	<input type="text" id="phone" name="phone" value="'+x.phone+'"><br>'
+    +'도 시<br>'
+    +'	<input type="text" id="city" name="city" value="'+x.city+'"><br>'
+    +'주 소<br>'
+    +'	<input type="text" id="address" name="address" value="'+x.address+'"><br>'
+    +'우편번호<br>'
+    +'	<input type="text" id="postalcode" name="postalcode" value="'+x.postalcode+'"><br>'
+    +'<br><br>'
+    +'	<input id="confirm-btn" type="submit" value="확 인">'
+    +'	<input id="cancel-btn" type="reset" value="취 소">'
+    +'</form>';
+}
+function update(x){
+    let wrapper = document.querySelector('#wrapper');
+    wrapper.innerHTML = customer.update_form(x);
+    alert('수정할 아이디: '+ document.getElementById('customerId').innerText );
+    document.getElementById('confirm-btn')
+        .addEventListener('click', e=>{
+            e.preventDefault();
+            let data = {
+                customerId : document.getElementById('customerId').innerText ,
+                customerName : document.getElementById('customerName').innerText ,
+                password : document.getElementById('password').value,
+                ssn : document.getElementById('ssn').innerText ,
+                phone : document.getElementById('phone').value,
+                city : document.getElementById('city').value,
+                address : document.getElementById('address').value,
+                postalcode : document.getElementById('postalcode').value
+            }
+            let xhr = new XMLHttpRequest();
+            xhr.open('PUT','customers/'+x.customerId,true);
+            xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+            xhr.onload=()=>{
+                if(xhr.readyState===4 && xhr.status === 200){
+                    let d = JSON.parse(xhr.responseText);
+                    customer.mypage(d);
+                }
+            };
+            xhr.send(JSON.stringify(data));    
+        });
+    
 }
 function remove(){
     let customerId = document.getElementById('customerId');
