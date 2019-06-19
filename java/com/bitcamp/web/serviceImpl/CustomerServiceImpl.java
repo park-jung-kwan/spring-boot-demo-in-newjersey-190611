@@ -23,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDTO> findCustomers() {
-        return null;
+        return customerMapper.selectCustomers();
     }
 
     @Override

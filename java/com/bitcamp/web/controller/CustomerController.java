@@ -1,6 +1,8 @@
 package com.bitcamp.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.bitcamp.web.domain.CustomerDTO;
 import com.bitcamp.web.service.CustomerService;
@@ -32,6 +34,23 @@ public class CustomerController {
         HashMap<String,Object> map = new HashMap<>();
        
         return map; 
+    }
+
+    @GetMapping("")
+    public List<CustomerDTO> list(){
+        List<CustomerDTO> list = new ArrayList<>();
+        list = customerService.findCustomers();
+        for (CustomerDTO customer : list) {
+            System.out.println(customer.getCustomerId()+" : "
+                            +customer.getCustomerName()+" : "
+                            +customer.getPassword()+" : "
+                            +customer.getSsn()+" : "
+                            +customer.getPhone()+" : "
+                            +customer.getCity()+" : "
+                            +customer.getAddress()+" : "
+                            +customer.getPostalcode());
+        }
+        return list;
     }
 
     @GetMapping("/count")   

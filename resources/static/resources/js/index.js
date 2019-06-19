@@ -19,6 +19,16 @@ var employee = {
     customer_list : customer_list,
     admin_login : admin_login
 };
+var session = {
+    set_value : set_value,
+    get_value : get_value
+};
+function set_value(x){
+    sessionStorage.setItem(x.name,x.value);
+}
+function get_value(x){
+    return sessionStorage.getItem(x);
+}
 function init(){
     $wrapper.innerHTML = customer.login_form();
     document.getElementById('join-btn')
@@ -60,21 +70,10 @@ function admin_login(){
 }
 function customer_list(){
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', x.domain+'/'+id+'/'+pass, true);
+    xhr.open('GET', 'customers', true);
     xhr.onload=()=>{
         if(xhr.readyState=== 4 && xhr.status === 200){
             let d = JSON.parse(xhr.responseText);
-            
-            if(d){
-                if(x.domain==='customers'){
-                    customer.mypage(d);
-                }else{
-                    employee.customer_list();
-                }
-                
-            }else{
-                app.init();
-            }
             
         }
     };
@@ -150,9 +149,14 @@ function login(x){
     xhr.onload=()=>{
         if(xhr.readyState=== 4 && xhr.status === 200){
             let d = JSON.parse(xhr.responseText);
-            
+            alert('세션에 들어간 이름: '+d.customerId)
+            session.set_value({'name':'userid','value':d.customerId});
+            session.set_value({'name':'username','value':d.customerName});
             if(d){
                 if(x.domain==='customers'){
+                   
+                    
+                
                     customer.mypage(d);
                 }else{
                     employee.customer_list();
@@ -173,8 +177,9 @@ function mypage(x){
     document.querySelector('#update-btn')
         .addEventListener('click',e=>{
             e.preventDefault();
-            alert('수정버튼 클릭');
-            customer.update(x);
+            alert('세션 테스트 ID' + session.get_value('userid'));
+            alert('세션 테스트 NAME' + session.get_value('username'));
+            //customer.update(x);
     });
     document.querySelector('#remove-btn')
         .addEventListener('click',e=>{
