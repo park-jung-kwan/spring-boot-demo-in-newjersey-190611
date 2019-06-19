@@ -72,9 +72,11 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{customerId}")
-    public HashMap<String,Object> deleteCustomer() {
+    public HashMap<String,Object> deleteCustomer(@PathVariable String customerId) {
         HashMap<String, Object> map = new HashMap<>();
-
+        customer.setCustomerId(customerId);
+        customerService.deleteCustomer(customer);
+        map.put("result","탈퇴성공");
         return map;
     }
 }

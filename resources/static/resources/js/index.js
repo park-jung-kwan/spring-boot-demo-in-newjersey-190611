@@ -14,6 +14,11 @@ var customer = {
     update : update,
     remove : remove
 };
+var employee = {
+    login : login,
+    customer_list : customer_list,
+    admin_login : admin_login
+};
 function init(){
     $wrapper.innerHTML = customer.login_form();
     document.getElementById('join-btn')
@@ -29,9 +34,53 @@ function init(){
         .addEventListener('click',e=>{
             e.preventDefault();
             alert('로그인 버튼 클릭');
-            customer.login();
+            customer.login({userid : 'customerId',
+                            domain : 'customers'
+                            });
+    });
+    document.getElementById('admin-btn')
+        .addEventListener('click',e=>{
+            e.preventDefault();
+            alert('관리자 버튼 클릭');
+            employee.admin_login();
     });
 }
+function admin_login(){
+    let isAdmin = confirm("관리자입니까?");
+    if(isAdmin){
+        let pass = prompt("관리자 번호를 입력하세요");
+        if(pass == 1000){
+            employee.customer_list();
+        }else{
+            alert('입력한 번호가 일치하지 않습니다.');
+        }
+    }else{
+      alert('관리자만 접속이 가능합니다.');  
+    }
+}
+function customer_list(){
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', x.domain+'/'+id+'/'+pass, true);
+    xhr.onload=()=>{
+        if(xhr.readyState=== 4 && xhr.status === 200){
+            let d = JSON.parse(xhr.responseText);
+            
+            if(d){
+                if(x.domain==='customers'){
+                    customer.mypage(d);
+                }else{
+                    employee.customer_list();
+                }
+                
+            }else{
+                app.init();
+            }
+            
+        }
+    };
+    xhr.send();
+}
+
 function join_form(){
     return '<form>'
     +'아이디<br>'
@@ -90,21 +139,25 @@ function login_form(){
     +'  <br><br>'
     +'  <input id="login-btn" type="button" value="LOGIN">'
     +'  <input id="join-btn" type="button" value="JOIN">'
+    +'  <input id="admin-btn" type="button" value="관리자">'
     +'</form> ';
 }
-function login(){
-    alert('로그인 함수에 들어옴');
-    id = document.getElementById('customerId').value;
+function login(x){
+    id = document.getElementById(x.userid).value;
     pass = document.getElementById('password').value;
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'customers/'+id+'/'+pass, true);
+    xhr.open('GET', x.domain+'/'+id+'/'+pass, true);
     xhr.onload=()=>{
         if(xhr.readyState=== 4 && xhr.status === 200){
             let d = JSON.parse(xhr.responseText);
-            alert('로그인 성공 후 이름:'+d.customerName)
+            
             if(d){
-                //$wrapper.innerHTML = customer.mypage(d);
-                customer.mypage(d);
+                if(x.domain==='customers'){
+                    customer.mypage(d);
+                }else{
+                    employee.customer_list();
+                }
+                
             }else{
                 app.init();
             }
@@ -122,6 +175,19 @@ function mypage(x){
             e.preventDefault();
             alert('수정버튼 클릭');
             customer.update(x);
+    });
+    document.querySelector('#remove-btn')
+        .addEventListener('click',e=>{
+            e.preventDefault();
+            alert('탈퇴버튼 클릭'+x.customerId);
+            let xhr = new XMLHttpRequest();
+            xhr.open('DELETE', 'customers/'+x.customerId, true);
+            xhr.onload=()=>{
+                if(xhr.readyState=== 4 && xhr.status === 200){
+                    app.init();
+                }
+            };
+            xhr.send();
     });
 }
 

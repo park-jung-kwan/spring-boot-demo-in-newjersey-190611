@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(CustomerDTO customer) {
-
+        customerMapper.deleteCustomer(customer);
     }
 
     @Override
