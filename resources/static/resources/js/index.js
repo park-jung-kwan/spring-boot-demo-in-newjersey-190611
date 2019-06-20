@@ -27,44 +27,15 @@ var session = {
 //  customerId, customerName, ssn, phone, city,
 function customer_list_form(){
     return '<h2>고객 목록</h2>'
-    +'<table>'
+    +'<table id="customer-table">'
     +'  <tr>'
       +'  <th>아이디</th>'
       +'  <th>고객명</th>'
       +'  <th>주민번호</th>'
-     // +'  <th>전화번호</th>'
-     // +'  <th>도시</th>'
-    +'  </tr>'
-    +'  <tr>'
-      +'  <td>Alfreds Futterkiste</td>'
-      +'  <td>Maria Anders</td>'
-      +'  <td>Germany</td>'
-    +'  </tr>'
-    +'  <tr>'
-      +'  <td>Centro comercial Moctezuma</td>'
-      +'  <td>Francisco Chang</td>'
-      +'  <td>Mexico</td>'
-    +'  </tr>'
-    +'  <tr>'
-      +'  <td>Ernst Handel</td>'
-      +'  <td>Roland Mendel</td>'
-      +'  <td>Austria</td>'
-    +'  </tr>'
-    +'  <tr>'
-      +'  <td>Island Trading</td>'
-      +'  <td>Helen Bennett</td>'
-      +'  <td>UK</td>'
-    +'  </tr>'
-    +'  <tr>'
-      +'  <td>Laughing Bacchus Winecellars</td>'
-      +'  <td>Yoshi Tannamuri</td>'
-      +'  <td>Canada</td>'
-    +'  </tr>'
-    +'  <tr>'
-      +'  <td>Magazzini Alimentari Riuniti</td>'
-      +'  <td>Giovanni Rovelli</td>'
-      +'  <td>Italy</td>'
-    +'  </tr></table>';
+      +'  <th>전화번호</th>'
+      +'  <th>도시</th>'
+    +'  </tr><tbody  id="tbody"></tbody>'
+    +'</table>';
   
 }
 
@@ -121,6 +92,25 @@ function customer_list(){
            // let d = JSON.parse(xhr.responseText);
             let wrapper = document.querySelector('#wrapper');
             wrapper.innerHTML = employee.customer_list_form();
+            let tbody = document.getElementById('tbody');
+            let i = 0;
+            let rows = '';
+            for(;i<5;i++){
+                rows += "<tr><td>"+i+"</td><td>"+i+"</td>"
+                +"<td>"+i+"</td><td>"+i+"</td><td>"+i+"</td></tr>";
+            }
+            tbody.innerHTML=rows;
+            
+            let blocks = document.createElement('div');
+            blocks.setAttribute('id', 'blocks');
+            wrapper.appendChild(blocks);
+            let spans = '';
+            i = 1;
+            for(;i<6;i++){
+                spans += "<span style='display:inline-block;padding-right:20px;border: 1px solid black;'>"+i+"</span>";
+            }
+            blocks.innerHTML=spans;
+            
         }
     };
     xhr.send();
