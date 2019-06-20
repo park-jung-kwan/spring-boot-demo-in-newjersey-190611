@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.bitcamp.web.common.util.Printer;
 import com.bitcamp.web.domain.CustomerDTO;
 import com.bitcamp.web.service.CustomerService;
 
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
     @Autowired CustomerService customerService;
     @Autowired CustomerDTO customer;
+    @Autowired Printer p;
 
     @PostMapping("")
     public HashMap<String,Object> join(@RequestBody CustomerDTO param){
@@ -39,7 +41,7 @@ public class CustomerController {
     @GetMapping("")
     public List<CustomerDTO> list(){
         List<CustomerDTO> list = new ArrayList<>();
-        list = customerService.findCustomers();
+       /* list = customerService.findCustomers();
         for (CustomerDTO customer : list) {
             System.out.println(customer.getCustomerId()+" : "
                             +customer.getCustomerName()+" : "
@@ -49,7 +51,7 @@ public class CustomerController {
                             +customer.getCity()+" : "
                             +customer.getAddress()+" : "
                             +customer.getPostalcode());
-        }
+        }**/
         return list;
     }
 
@@ -57,7 +59,7 @@ public class CustomerController {
     public String count() {
         System.out.println("CustomerController count() 경로로 들어옴");
         int count = customerService.countAll();
-        System.out.println("고객의 총인원 : "+count);
+        p.accept("람다가 출력한 고객의 총인원 : "+count);
         return count+"";
     }
 

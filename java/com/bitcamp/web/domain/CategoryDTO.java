@@ -14,6 +14,7 @@ public class CategoryDTO {
     private String categoryId,
                     categoryName,
                     description;
+                   private ProductDTO p;
 
 
 }
