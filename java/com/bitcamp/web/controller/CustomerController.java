@@ -41,14 +41,16 @@ public class CustomerController {
     }
 
     @GetMapping("/page/{pageNum}")
-    public List<CustomerDTO> list(@PathVariable String pageNum){
+    public HashMap<String, Object> list(@PathVariable String pageNum){
        HashMap<String, Object> map = new HashMap<>();
        map.put("totalCount", customerService.countAll());
        map.put("page_num", pageNum);
        map.put("page_size", "5");
        map.put("block_size", "5");
        pxy.execute(map);
-       return customerService.findCustomers(pxy);
+       map.put("list", customerService.findCustomers(pxy));
+       map.put("pxy", pxy);
+       return map;
     }
 
     @GetMapping("/count")   

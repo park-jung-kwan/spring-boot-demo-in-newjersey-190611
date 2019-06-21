@@ -100,39 +100,56 @@ function customer_list(x){
             wrapper.innerHTML = employee.customer_list_form();
             let tbody = document.getElementById('tbody');
             let i = 0;
-            d.forEach((v, i)=>{
+            d.list.forEach((v, i)=>{
                 tbody.innerHTML+=create_customer_row(v);
             });
             let blocks = document.createElement('div');
             blocks.setAttribute('id', 'blocks');
             wrapper.appendChild(blocks);
-            let spans = '';
+            let spans = document.createElement('div');
             i = 1;
             for(;i<6;i++){
-                let span = document.createElement('span');
-                span.setAttribute('style',
-                'display:inline-block;padding-right:20px;'
-                +'border: 1px solid black;cursor:pointer')
+                let span = document.createElement('span')
+                span.setAttribute('style','display:inline-block;padding-right:20px;border: 1px solid black;');
+                span.setAttribute('class','page-num');
                 span.innerHTML = i;
-                span.addEventListener('click', e=>{
-                    e.preventDefault();
-                    employee.customer_list(i);
-                });
-                blocks.appendChild(span)        
+                if(x == span.innerHTML){
+                    span.style.backgroundColor = "red"; 
+                }
+                spans.appendChild(span);
             }
-            if(d.existPrev){
+            blocks.appendChild(spans);
+            let clss = document.getElementsByClassName('page-num');
+            /*
+            이형우의 로직**/
+            i = 0;
+            for(;i<clss.length;i++){
+                (function(i){
+                    clss[i].addEventListener('click',function(){
+                        customer_list(this.innerText)
+                    })
+                })(i)
+            }
+            
+           /**
+            최동훈의 로직
+            
+            for(let i = 1; i < 6; i++){
+            inputs += '<input type="button" value="' + i + '" onclick="customer_list(this.value)"/>';
+            }
+            */
+           if(d.pxy.existPrev){
                 let prevBlock = document.createElement('span');
-                span.setAttribute('style',
-                'display:inline-block;padding-right:20px;'
-                +'border: 1px solid black;cursor:pointer');
-                blocks.prependChild(prevBlock)    
+                prevBlock.setAttribute('style','display:inline-block;padding-right:20px;border: 1px solid black;');
+                prevBlock.textContent="<";
+                blocks.prepend(prevBlock);
             }
-            if(d.existNext){
+    
+            if(d.pxy.existNext){
                 let nextBlock = document.createElement('span');
-                span.setAttribute('style',
-                'display:inline-block;padding-right:20px;'
-                +'border: 1px solid black;cursor:pointer');
-                blocks.appendChild(nextBlock)    
+                nextBlock.setAttribute('style','display:inline-block;padding-right:20px;border: 1px solid black;');
+                nextBlock.textContent=">";
+                blocks.appendChild(nextBlock);
             }
         }
     };
