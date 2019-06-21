@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.bitcamp.web.common.util.PageProxy;
 import com.bitcamp.web.common.util.Printer;
 import com.bitcamp.web.domain.CustomerDTO;
 import com.bitcamp.web.service.CustomerService;
@@ -39,8 +40,13 @@ public class CustomerController {
     }
 
     @GetMapping("")
-    public List<CustomerDTO> list(){
+    public List<CustomerDTO> list(@RequestBody PageProxy pxy){
         List<CustomerDTO> list = new ArrayList<>();
+       // rowCount, page_num, page_size, block_size
+       HashMap<String, Object> map = new HashMap<>();
+       map.put("totalCount", customerService.countAll());
+       pxy.execute(map);
+       customerService.findCustomers(pxy);
        /* list = customerService.findCustomers();
         for (CustomerDTO customer : list) {
             System.out.println(customer.getCustomerId()+" : "
