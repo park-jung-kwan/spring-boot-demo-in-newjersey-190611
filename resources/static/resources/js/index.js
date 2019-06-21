@@ -76,7 +76,7 @@ function admin_login(){
     if(isAdmin){
         let pass = prompt("관리자 번호를 입력하세요");
         if(pass == 1000){
-            employee.customer_list();
+            employee.customer_list('1');
         }else{
             alert('입력한 번호가 일치하지 않습니다.');
         }
@@ -84,22 +84,29 @@ function admin_login(){
       alert('관리자만 접속이 가능합니다.');  
     }
 }
-function customer_list(){
+function create_customer_row(x) {
+    return  "<tr><td>"+x.customerId+"</td><td>"+x.customerName+"</td>"
+                +"<td>"+x.ssn+"</td><td>"+x.phone+"</td><td>"+x.city+"</td></tr>"; 
+}
+
+function customer_list(x){
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'customers', true);
+     // pageNum, pageSize, blockSize
+    xhr.open('GET', 'customers/page/'+x, true);
     xhr.onload=()=>{
         if(xhr.readyState=== 4 && xhr.status === 200){
-           // let d = JSON.parse(xhr.responseText);
+            let d = JSON.parse(xhr.responseText);
+            alert(d[0].customerName);
             let wrapper = document.querySelector('#wrapper');
             wrapper.innerHTML = employee.customer_list_form();
             let tbody = document.getElementById('tbody');
             let i = 0;
-            let rows = '';
-            for(;i<5;i++){
-                rows += "<tr><td>"+i+"</td><td>"+i+"</td>"
-                +"<td>"+i+"</td><td>"+i+"</td><td>"+i+"</td></tr>";
-            }
-            tbody.innerHTML=rows;
+            d.forEach((v, i)=>{
+                let row  = create_customer_row(v)
+                tbody.innerHTML+=row;
+            });
+            
+            
             
             let blocks = document.createElement('div');
             blocks.setAttribute('id', 'blocks');

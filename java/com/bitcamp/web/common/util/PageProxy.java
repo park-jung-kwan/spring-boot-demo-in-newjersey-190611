@@ -12,8 +12,10 @@ import lombok.Data;
 
 @Component @Data @Lazy
 public class PageProxy {
+    @Autowired Printer p;
     private int pageNum, pageSize, blockSize, startRow,
                 endRow, startPage, endPage, prevBlock, nextBlock, totalCount;
+                
     private String search;
     private boolean existPrev, existNext;
 

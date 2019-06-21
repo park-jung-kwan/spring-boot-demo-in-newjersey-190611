@@ -31,6 +31,7 @@ public class CustomerController {
     @Autowired CustomerService customerService;
     @Autowired CustomerDTO customer;
     @Autowired Printer p;
+    @Autowired PageProxy pxy;
 
     @PostMapping("")
     public HashMap<String,Object> join(@RequestBody CustomerDTO param){
@@ -39,26 +40,15 @@ public class CustomerController {
         return map; 
     }
 
-    @GetMapping("")
-    public List<CustomerDTO> list(@RequestBody PageProxy pxy){
-        List<CustomerDTO> list = new ArrayList<>();
-       // rowCount, page_num, page_size, block_size
+    @GetMapping("/page/{pageNum}")
+    public List<CustomerDTO> list(@PathVariable String pageNum){
        HashMap<String, Object> map = new HashMap<>();
        map.put("totalCount", customerService.countAll());
+       map.put("page_num", pageNum);
+       map.put("page_size", "5");
+       map.put("block_size", "5");
        pxy.execute(map);
-       customerService.findCustomers(pxy);
-       /* list = customerService.findCustomers();
-        for (CustomerDTO customer : list) {
-            System.out.println(customer.getCustomerId()+" : "
-                            +customer.getCustomerName()+" : "
-                            +customer.getPassword()+" : "
-                            +customer.getSsn()+" : "
-                            +customer.getPhone()+" : "
-                            +customer.getCity()+" : "
-                            +customer.getAddress()+" : "
-                            +customer.getPostalcode());
-        }**/
-        return list;
+       return customerService.findCustomers(pxy);
     }
 
     @GetMapping("/count")   
