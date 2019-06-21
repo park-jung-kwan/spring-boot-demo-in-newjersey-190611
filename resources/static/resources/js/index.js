@@ -96,28 +96,44 @@ function customer_list(x){
     xhr.onload=()=>{
         if(xhr.readyState=== 4 && xhr.status === 200){
             let d = JSON.parse(xhr.responseText);
-            alert(d[0].customerName);
             let wrapper = document.querySelector('#wrapper');
             wrapper.innerHTML = employee.customer_list_form();
             let tbody = document.getElementById('tbody');
             let i = 0;
             d.forEach((v, i)=>{
-                let row  = create_customer_row(v)
-                tbody.innerHTML+=row;
+                tbody.innerHTML+=create_customer_row(v);
             });
-            
-            
-            
             let blocks = document.createElement('div');
             blocks.setAttribute('id', 'blocks');
             wrapper.appendChild(blocks);
             let spans = '';
             i = 1;
             for(;i<6;i++){
-                spans += "<span style='display:inline-block;padding-right:20px;border: 1px solid black;'>"+i+"</span>";
+                let span = document.createElement('span');
+                span.setAttribute('style',
+                'display:inline-block;padding-right:20px;'
+                +'border: 1px solid black;cursor:pointer')
+                span.innerHTML = i;
+                span.addEventListener('click', e=>{
+                    e.preventDefault();
+                    employee.customer_list(i);
+                });
+                blocks.appendChild(span)        
             }
-            blocks.innerHTML=spans;
-            
+            if(d.existPrev){
+                let prevBlock = document.createElement('span');
+                span.setAttribute('style',
+                'display:inline-block;padding-right:20px;'
+                +'border: 1px solid black;cursor:pointer');
+                blocks.prependChild(prevBlock)    
+            }
+            if(d.existNext){
+                let nextBlock = document.createElement('span');
+                span.setAttribute('style',
+                'display:inline-block;padding-right:20px;'
+                +'border: 1px solid black;cursor:pointer');
+                blocks.appendChild(nextBlock)    
+            }
         }
     };
     xhr.send();
